@@ -1,20 +1,17 @@
-//createDatabase.js file
 const { MongoClient } = require('mongodb');
 const data = require('./data'); // Ensure this file exists and contains the data you want to insert
 
-// Connect to DATABASE
-//const DATABASE_URL = "mongodb://127.0.0.1:27017/";
-//const DATABASE_NAME = "tomato";
-const DATABASE_URL = process.env.DATABASE_URL || "mongodb://127.0.0.1:27017/";
-const DATABASE_NAME = process.env.DATABASE_NAME || "tomato";
+// Connect to MongoDB Atlas
+const DATABASE_URL = process.env.DATABASE_URL;  // MongoDB Atlas connection string
+const DATABASE_NAME = process.env.DATABASE_NAME;  // Database name 'tomato'
 const port = process.env.PORT || 3000;
 
 const refreshAll = async () => {
   let client;
 
   try {
-    // Connect to the MongoDB server
-    client = await MongoClient.connect(DATABASE_URL);
+    // Connect to the MongoDB Atlas server with options
+    client = await MongoClient.connect(DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
     console.log('Database connected...');
 
@@ -41,3 +38,4 @@ const refreshAll = async () => {
 };
 
 refreshAll();
+
