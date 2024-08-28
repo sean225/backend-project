@@ -1,28 +1,25 @@
-//index.js file
 const express = require('express');
 const app = require('./app.js');
 const { MongoClient } = require('mongodb');
-//const port = 3000;
 
 // Parse JSON bodies (as sent by API clients)
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Connect to DATABASE
-//const DATABASE_URL = "mongodb://127.0.0.1:27017/";
-//const DATABASE_NAME = "tomato";
-const DATABASE_URL = process.env.DATABASE_URL || "mongodb://127.0.0.1:27017/";
-const DATABASE_NAME = process.env.DATABASE_NAME || "tomato";
+// Environment variables
+const DATABASE_URL = process.env.DATABASE_URL;
+const DATABASE_NAME = process.env.DATABASE_NAME;
 const port = process.env.PORT || 3000;
 
-const connectDB = async () => {
-  let client;
+let client;
 
+const connectDB = async () => {
   try {
-    client = await MongoClient.connect(DATABASE_URL);
+    // Connect to the MongoDB Atlas server with options
+    client = await MongoClient.connect(DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
     console.log('Connected to database');
-    
+
     const db = client.db(DATABASE_NAME);
 
     // Pass the db connection to the app
@@ -33,8 +30,32 @@ const connectDB = async () => {
 
   } catch (err) {
     console.error('Failed to connect to the database:', err);
+    process.exit(1); // Exit the process if the database connection fails
   }
 };
 
+// Graceful shutdown
+const gracefulShutdown = () => {
+  if (client) {
+    client.close()
+      .then(() => {
+        console.log('Database connection closed');
+        process.exit(0);
+      })
+      .catch(err => {
+        console.error('Error closing database connection:', err);
+        process.exit(1);
+      });
+  } else {
+    process.exit(0);
+  }
+};
+
+// Listen for termination signals (e.g., SIGINT, SIGTERM) to handle graceful shutdown
+process.on('SIGINT', gracefulShutdown);
+process.on('SIGTERM', gracefulShutdown);
+
 connectDB();
+
+
 
