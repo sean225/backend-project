@@ -1,5 +1,7 @@
 const { MongoClient } = require('mongodb');
 const data = require('./data'); // Ensure this file exists and contains the data you want to insert
+require('dotenv').config({ path: './src/.env' });
+
 
 // Connect to MongoDB Atlas
 const DATABASE_URL = process.env.DATABASE_URL;  // MongoDB Atlas connection string
