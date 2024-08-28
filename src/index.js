@@ -18,7 +18,7 @@ let client;
 const connectDB = async () => {
   try {
     // Connect to the MongoDB Atlas server with options
-    client = await MongoClient.connect(DATABASE_URL);
+     client = await MongoClient.connect(`${DATABASE_URL}?tls=true&tlsInsecure=true`);
 
 
     console.log('Connected to database');
