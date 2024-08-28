@@ -1,6 +1,8 @@
 const express = require('express');
 const app = require('./app.js');
 const { MongoClient } = require('mongodb');
+require('dotenv').config({ path: './src/.env' });
+
 
 // Parse JSON bodies (as sent by API clients)
 app.use(express.json());
