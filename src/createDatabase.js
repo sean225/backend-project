@@ -13,7 +13,7 @@ const refreshAll = async () => {
 
   try {
     // Connect to the MongoDB Atlas server with options
-    client = await MongoClient.connect(DATABASE_URL);
+    client = await MongoClient.connect(DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
     console.log('Database connected...');
