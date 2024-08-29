@@ -6,15 +6,18 @@ require('dotenv').config({ path: './src/.env' });
 // Connect to MongoDB Atlas
 const DATABASE_URL = process.env.DATABASE_URL;  // MongoDB Atlas connection string
 const DATABASE_NAME = process.env.DATABASE_NAME;  // Database name 'tomato'
-const port = process.env.PORT || 3000;
 
 const refreshAll = async () => {
   let client;
 
   try {
     // Connect to the MongoDB Atlas server with options
-    client = await MongoClient.connect(DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true });
-
+    client = await MongoClient.connect(DATABASE_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      tls: true,               // Enable TLS/SSL for the connection
+      tlsInsecure: false,      // Ensure certificate validation for security
+    });
 
     console.log('Database connected...');
 
@@ -41,4 +44,3 @@ const refreshAll = async () => {
 };
 
 refreshAll();
-
