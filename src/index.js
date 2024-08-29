@@ -3,7 +3,6 @@ const app = require('./app.js');
 const { MongoClient } = require('mongodb');
 require('dotenv').config({ path: './src/.env' });
 
-
 // Parse JSON bodies (as sent by API clients)
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -13,13 +12,17 @@ const DATABASE_URL = process.env.DATABASE_URL;
 const DATABASE_NAME = process.env.DATABASE_NAME;
 const port = process.env.PORT || 3000;
 
-let client;
+let client; // Declare the client variable globally
 
 const connectDB = async () => {
   try {
     // Connect to the MongoDB Atlas server with options
-     client = await MongoClient.connect(`${DATABASE_URL}?tls=true&tlsInsecure=true`);
-
+    client = await MongoClient.connect(DATABASE_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      tls: true,               // Enable TLS/SSL for the connection
+      tlsInsecure: false,      // Ensure certificate validation for security
+    });
 
     console.log('Connected to database');
 
