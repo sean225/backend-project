@@ -1,17 +1,66 @@
-//app.js file
 const express = require("express");
 const app = express();
 const { ObjectId } = require('mongodb');
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-// Welcome message route
+// Swagger setup
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Subscriber API',
+      version: '1.0.0',
+      description: 'API documentation for the Subscriber service',
+    },
+    servers: [
+      {
+        url: 'https://backend-project-1-yizw.onrender.com',
+      },
+    ],
+  },
+  apis: ['./src/app.js'], // Path to your API routes files
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     summary: Welcome message
+ *     responses:
+ *       200:
+ *         description: A welcome message
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *               example: "Welcome User.."
+ */
 app.get("/", (req, res) => {
   res.json("Welcome User..");
 });
 
-// 1. Get all subscribers from the database
+/**
+ * @swagger
+ * /subscribers:
+ *   get:
+ *     summary: Get all subscribers
+ *     responses:
+ *       200:
+ *         description: A list of all subscribers
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ */
 app.get("/subscribers", async (req, res) => {
   try {
     const db = req.app.locals.db;
@@ -22,7 +71,26 @@ app.get("/subscribers", async (req, res) => {
   }
 });
 
-// 2. Get subscribers' names and subscribed channels from the database
+/**
+ * @swagger
+ * /subscribers/names:
+ *   get:
+ *     summary: Get subscribers' names and subscribed channels
+ *     responses:
+ *       200:
+ *         description: A list of subscribers with their names and subscribed channels
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   name:
+ *                     type: string
+ *                   subscribedChannel:
+ *                     type: string
+ */
 app.get("/subscribers/names", async (req, res) => {
   try {
     const db = req.app.locals.db;
@@ -36,14 +104,35 @@ app.get("/subscribers/names", async (req, res) => {
   }
 });
 
-// 3. Get a particular subscriber by _id
+/**
+ * @swagger
+ * /subscribers/{id}:
+ *   get:
+ *     summary: Get a subscriber by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the subscriber to retrieve
+ *     responses:
+ *       200:
+ *         description: The subscriber with the specified ID
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *       404:
+ *         description: No subscriber found with the specified ID
+ *       500:
+ *         description: Error fetching subscriber
+ */
 app.get("/subscribers/:id", async (req, res) => {
   const id = req.params.id;
 
   try {
-    // Directly create ObjectId without validation
     const objectId = new ObjectId(id);
-    
     const db = req.app.locals.db;
     const subscriber = await db.collection("tomato").findOne({ _id: objectId });
     
@@ -53,13 +142,10 @@ app.get("/subscribers/:id", async (req, res) => {
 
     res.json(subscriber);
   } catch (error) {
-    // Catch any errors that occur during ObjectId creation or query
     res.status(500).json({ message: `Error fetching subscriber with _id: ${id}`, error: error.message });
   }
 });
 
- 
- 
 // Handles unwanted requests.
 app.use((req, res) => {
   res.status(404).json({ message: "Error !! please check the route " });
