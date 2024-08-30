@@ -5,6 +5,7 @@ const { MongoClient } = require('mongodb');
 require('dotenv').config({ path: './src/.env' });
 
 // Parse JSON bodies (as sent by API clients)
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
