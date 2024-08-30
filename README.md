@@ -56,8 +56,8 @@ This endpoint returns a list of YouTube subscribers with their subscriber count.
     {
       "_id": "integer",
       "name": "string",
-      "subscribedChannel": "string",
-      "subscribedDate": "date"
+      "subscribedChannel": "string"
+       
     }
   ]
  
@@ -90,8 +90,7 @@ This API endpoint returns the details of a specific YouTube subscriber with the 
   | `_id`              | integer| This is the ID of the subscriber                    |
   | `name`             | string | The name of the YouTube subscriber                  |
   | `subscribedChannel`| string | The name of the YouTube channel subscribed to by the subscriber |
-  | `subscribedDate`   | date   | The date when the user subscribed                   |
-
+  
 ## Prerequisites
 
 - Node.js installed on your machine.
