@@ -103,4 +103,18 @@ This API endpoint returns the details of a specific YouTube subscriber with the 
 3. Install dependencies by running:
    ```bash
    npm install
+4.Start the application by running:
+   ```bash
+   node src/createDatabase.js
+   node src/index.js
+
+5.The application will be running on `http://localhost:3000`.
+
+## Dependencies
+
+- `nodejs: "^16.18.0"`
+- `express: "^4.17.1"`
+- `nodemon: "^2.0.22"`
+- `mongoose: "^5.10.15"`
+
 
