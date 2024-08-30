@@ -60,3 +60,47 @@ This endpoint returns a list of YouTube subscribers with their subscriber count.
       "subscribedDate": "date"
     }
   ]
+ 
+### 2. GET `/subscribers/names`
+This API endpoint returns a list of YouTube subscribers with their name and subscribed channel.
+
+- **Request URL:** `http://localhost:3000/subscribers/names`
+- **Request Method:** `GET`
+- **Request Parameters:** None
+- **Response:**
+  The API returns a JSON object with the following fields:
+  
+  | Field              | Type   | Description                                         |
+  |--------------------|--------|-----------------------------------------------------|
+  | `name`             | string | The name of the YouTube subscriber                  |
+  | `subscribedChannel`| string | The name of the YouTube channel subscribed to by the subscriber |
+
+### 3. GET `/subscribers/:id`
+This API endpoint returns the details of a specific YouTube subscriber with the given ID.
+
+- **Request URL:** `http://localhost:3000/subscribers/:id`
+- **Request Method:** `GET`
+- **Request Parameters:**
+  - `id (integer)`: The ID of the YouTube subscriber to retrieve.
+- **Response:**
+  The API returns a JSON object with the following fields:
+  
+  | Field              | Type   | Description                                         |
+  |--------------------|--------|-----------------------------------------------------|
+  | `_id`              | integer| This is the ID of the subscriber                    |
+  | `name`             | string | The name of the YouTube subscriber                  |
+  | `subscribedChannel`| string | The name of the YouTube channel subscribed to by the subscriber |
+  | `subscribedDate`   | date   | The date when the user subscribed                   |
+
+## Prerequisites
+
+- Node.js installed on your machine.
+
+## Getting Started
+
+1. Clone the repository or download the code.
+2. Navigate to the project directory in your terminal.
+3. Install dependencies by running:
+   ```bash
+   npm install
+
